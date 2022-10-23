@@ -9,13 +9,22 @@ public class PlayerScript : MonoBehaviour
     private Rigidbody2D rd2d;
     public float speed;
     public Text score;
+    public Text Lives;
+    public GameObject winText;
+    public GameObject loseText;
+    public GameObject player;
+    
     private int scoreValue = 0;
+    private int livesValue = 3;
 
     // Start is called before the first frame update
     void Start()
     {
         rd2d = GetComponent<Rigidbody2D>();
-        score.text = scoreValue.ToString();
+        score.text = "Score: " + scoreValue.ToString();
+        Lives.text = "Lives: " + livesValue.ToString();
+        winText.SetActive(false);
+        loseText.SetActive(false);
     }
 
     // Update is called once per frame
@@ -28,16 +37,46 @@ public class PlayerScript : MonoBehaviour
 
     }
 
+    void Update()
+    {
+        if(scoreValue == 8)
+        {
+            winText.SetActive(true);
+            Destroy(player);
+        }
+
+        if(livesValue == 0)
+        {
+            loseText.SetActive(true);
+        }
+    }
+    
     private void OnCollisionEnter2D(Collision2D collision)
    {
         if(collision.collider.tag == "Coin")
         {
             scoreValue += 1;
-            score.text =scoreValue.ToString();
+            score.text = scoreValue.ToString();
+            Destroy(collision.collider.gameObject);
+            
+                // moving locations
+                if(scoreValue == 4)
+            {
+                transform.position = new Vector2(56f, 1f);
+                livesValue = 3;
+                Lives.text = livesValue.ToString();
+            }
+        }
+
+        if(collision.collider.tag == "Enemy")
+        {
+            livesValue -= 1;
+            Lives.text = livesValue.ToString();
             Destroy(collision.collider.gameObject);
         }
-   }
 
+
+   }
    private void OnCollisionStay2D(Collision2D collision)
    {
         if(collision.collider.tag == "Ground")
