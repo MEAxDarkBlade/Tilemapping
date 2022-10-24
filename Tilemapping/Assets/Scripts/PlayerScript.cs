@@ -12,7 +12,9 @@ public class PlayerScript : MonoBehaviour
     public Text Lives;
     public GameObject winText;
     public GameObject loseText;
-    public GameObject player;
+    public AudioSource musicSource;
+    public AudioClip musicClipOne;
+    public AudioClip musicClipTwo;
     
     private int scoreValue = 0;
     private int livesValue = 3;
@@ -25,6 +27,8 @@ public class PlayerScript : MonoBehaviour
         Lives.text = "Lives: " + livesValue.ToString();
         winText.SetActive(false);
         loseText.SetActive(false);
+        musicSource.clip = musicClipOne;
+        musicSource.Play();
     }
 
     // Update is called once per frame
@@ -41,8 +45,11 @@ public class PlayerScript : MonoBehaviour
     {
         if(scoreValue == 8)
         {
+            speed = 0;
             winText.SetActive(true);
-            Destroy(player);
+            musicSource.loop = false;
+            musicSource.clip = musicClipTwo;
+            musicSource.Play();
         }
 
         if(livesValue == 0)
